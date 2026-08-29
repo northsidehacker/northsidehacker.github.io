@@ -122,6 +122,9 @@ body {
 ============================================ */
 #hero {
   padding-top: 90px;
+  min-height: 65vh;
+  display: flex;
+  align-items: center;
 }
 
 .hero-name {
@@ -175,6 +178,41 @@ body {
   height: 2px;
   background: var(--accent);
   border-radius: 2px;
+}
+
+/* ============================================
+   STATS
+============================================ */
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--accent-border);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 255, 153, 0.07);
+}
+
+.stat-number {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.2;
+}
+
+.stat-label {
+  margin-top: 4px;
+}
+
+#stats {
+  border-top: 1px solid var(--accent-border);
+  margin-top: 20px;
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
 
 /* ============================================
