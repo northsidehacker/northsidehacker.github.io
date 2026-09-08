@@ -1,15 +1,63 @@
 /* ============================================
-   TYPED.JS — Hero subtitle
+   SCRAMBLE EFFECT — Hero subtitle
 ============================================ */
 document.addEventListener("DOMContentLoaded", () => {
-  new Typed("#typed-output", {
-    strings: ["Bug Bounty Hunter.", "Security Researcher."],
-    typeSpeed: 100,
-    backSpeed: 30,
-    backDelay: 1800,
-    loop: true,
-    smartBackspace: true,
-  });
+  const el = document.getElementById("typed-output");
+  const words = ["Bug Bounty Hunter.", "Security Researcher.", "CTF Player."];
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz@#$%&!?";
+  let wordIndex = 0;
+
+  // Add blinking cursor via JS so it matches your typed-cursor style
+  el.style.borderRight = "2px solid var(--accent)";
+  el.style.paddingRight = "4px";
+  setInterval(() => {
+    el.style.borderRightColor =
+      el.style.borderRightColor === "transparent"
+        ? "var(--accent)"
+        : "transparent";
+  }, 500);
+
+  function scrambleTo(newWord) {
+    const duration = 1200;
+    const start = performance.now();
+
+    return new Promise((resolve) => {
+      function update(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+
+        el.textContent = newWord
+          .split("")
+          .map((char, i) => {
+            if (char === " ") return " ";
+            const charProgress = Math.min((progress - i * 0.04) / 0.45, 1);
+            if (charProgress >= 1) return char;
+            if (charProgress <= 0)
+              return chars[Math.floor(Math.random() * chars.length)];
+            return chars[Math.floor(Math.random() * chars.length)];
+          })
+          .join("");
+
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        } else {
+          el.textContent = newWord;
+          resolve();
+        }
+      }
+      requestAnimationFrame(update);
+    });
+  }
+
+  async function loop() {
+    while (true) {
+      await scrambleTo(words[wordIndex]);
+      await new Promise((r) => setTimeout(r, 2200));
+      wordIndex = (wordIndex + 1) % words.length;
+    }
+  }
+
+  loop();
 
   /* ============================================
      NAVBAR — highlight active section on scroll
@@ -31,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
         navLinks.forEach((link) => {
           link.classList.toggle(
             "active-link",
-            link.getAttribute("href") === `#${id}`,
+            link.getAttribute("href") === `#${id}`
           );
         });
       }
@@ -60,8 +108,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* ============================================
-     STATS — count-up animation on scroll into view
-  ============================================ */
+   STATS — count-up animation on scroll into view
+============================================ */
 const statNumbers = document.querySelectorAll(".stat-number");
 
 const animateCount = (el) => {
@@ -87,7 +135,7 @@ const statObserver = new IntersectionObserver(
       }
     });
   },
-  { threshold: 0.5 },
+  { threshold: 0.5 }
 );
 
 statNumbers.forEach((el) => statObserver.observe(el));
